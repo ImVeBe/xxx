@@ -1,0 +1,30 @@
+from flask import Flask, render_template, request, redirect
+
+app = Flask(__name__)
+
+study_goals = []
+tasks = []
+
+@app.route('/')
+def index():
+    return render_template('index.html', study_goals=study_goals, tasks=tasks)
+
+@app.route('/add_goal', methods=['POST'])
+def add_goal():
+    goal = request.form['goal']
+    study_goals.append(goal)
+    return redirect('/')
+
+@app.route('/add_task', methods=['POST'])
+def add_task():
+    task = request.form['task']
+    tasks.append(task)
+    return redirect('/')
+
+@app.route('/complete_task/<int:task_id>')
+def complete_task(task_id):
+    tasks.pop(task_id)
+    return redirect('/')
+
+if __name__ == '__main__':
+    app.run(debug=True)
